@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/content_main"/>
+
+    <ImageButton
+        android:id="@+id/nextFabButton"
+        android:layout_width="@dimen/round_button_diameter"
+        android:layout_height="@dimen/round_button_diameter"
+        android:layout_margin="@dimen/fab_margin"
+        android:stateListAnimator="@animator/button_elevation"
+        android:background="@drawable/ripple_effect"
+        android:elevation="@dimen/elevation_high"
+        android:tint="@android:color/white"
+        android:src="@drawable/ic_arrow_forward_white_24dp"
+        android:layout_gravity="bottom|end" />
+    <ImageButton
+        android:id="@+id/infoButton"
+        android:layout_width="@dimen/round_button_diameter"
+        android:layout_height="@dimen/round_button_diameter"
+        android:layout_margin="@dimen/fab_margin"
+        android:stateListAnimator="@animator/button_elevation"
+        android:background="@drawable/ripple_effect"
+        android:elevation="@dimen/elevation_high"
+        android:tint="@android:color/white"
+        android:src="@drawable/ic_info_white_24dp"
+        android:layout_gravity="bottom|start" />
+
+</android.support.design.widget.CoordinatorLayout>
