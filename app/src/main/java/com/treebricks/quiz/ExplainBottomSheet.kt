@@ -13,7 +13,7 @@ import android.widget.TextView
 * Project: Quiz
 */
 
-class ModalBottomSheet : BottomSheetDialogFragment() {
+class ExplainBottomSheet : BottomSheetDialogFragment() {
 
     private var correctAnswer: String? = null
     private var explainText: String? = null
@@ -34,8 +34,8 @@ class ModalBottomSheet : BottomSheetDialogFragment() {
         return view
     }
 
-    fun newInstance(correctAnswer: String, explaination: String, image: Int): ModalBottomSheet {
-        val modalBottomSheet = ModalBottomSheet()
+    fun newInstance(correctAnswer: String, explaination: String, image: Int): ExplainBottomSheet {
+        val modalBottomSheet = ExplainBottomSheet()
         modalBottomSheet.correctAnswer = correctAnswer
         modalBottomSheet.explainText = explaination
         modalBottomSheet.explainImage = image

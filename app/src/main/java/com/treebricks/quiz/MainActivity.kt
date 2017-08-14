@@ -227,7 +227,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
     }
 
     private fun showExplanation(){
-        val modalBottomSheet = ModalBottomSheet().newInstance(quizes[currentQuestion].answer as String,
+        val modalBottomSheet = ExplainBottomSheet().newInstance(quizes[currentQuestion].answer as String,
                 quizes[currentQuestion].explanation as String, this.resources.getIdentifier(quizes[currentQuestion].image,
                 "drawable", this.packageName))
         modalBottomSheet.show(supportFragmentManager, "bottom sheet")
