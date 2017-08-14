@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import com.treebricks.quiz.model.QuizQA
-
 import io.realm.Realm
 import kotlin.properties.Delegates
 import java.io.File
@@ -22,13 +21,7 @@ import android.graphics.Outline
 import android.media.MediaPlayer
 import android.view.ViewOutlineProvider
 
-
-
 class MainActivity : AppCompatActivity(), View.OnClickListener{
-
-    companion object{
-        val TAG: String = MainActivity::class.java.simpleName
-    }
 
     val quizes = ArrayList<QuizQA>()
     var currentQuestion = 0
@@ -77,7 +70,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
 
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.setStatusBarColor(Color.parseColor("#A63F51B5"))
+        window.statusBarColor = Color.parseColor("#A63F51B5")
 
         nextButton.outlineProvider = object : ViewOutlineProvider() {
             @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -86,7 +79,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
                 outline.setOval(0, 0, diameter, diameter)
             }
         }
-        nextButton.setClipToOutline(true)
+        nextButton.clipToOutline = true
 
 
 
@@ -96,21 +89,20 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
             quizes.add(quizqa)
         }
 
-        questionView.text = quizes.get(currentQuestion).question
-        option1.text = quizes.get(currentQuestion).options?.get(0)?.option
-        option2.text = quizes.get(currentQuestion).options?.get(1)?.option
-        option3.text = quizes.get(currentQuestion).options?.get(2)?.option
-        option4.text = quizes.get(currentQuestion).options?.get(3)?.option
+        questionView.text = quizes[currentQuestion].question
+        option1.text = quizes[currentQuestion].options?.get(0)?.option
+        option2.text = quizes[currentQuestion].options?.get(1)?.option
+        option3.text = quizes[currentQuestion].options?.get(2)?.option
+        option4.text = quizes[currentQuestion].options?.get(3)?.option
 
-        scoreView.text = "$correct correct out of $tried try"
-
+        updateScore()
     }
 
     override fun onClick(v: View?) {
-        when (v?.getId()) {
+        when (v?.id) {
 
             R.id.option1 -> {
-                if (quizes.get(currentQuestion).answer == option1.text){
+                if (quizes[currentQuestion].answer == option1.text){
                     rightAnswer(option1)
                 }else {
                     wrongAnswer(option1)
@@ -118,7 +110,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
             }
 
             R.id.option2 -> {
-                if (quizes.get(currentQuestion).answer == option2.text){
+                if (quizes[currentQuestion].answer == option2.text){
                     rightAnswer(option2)
                 }else{
                     wrongAnswer(option2)
@@ -126,7 +118,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
             }
 
             R.id.option3 -> {
-                if (quizes.get(currentQuestion).answer == option3.text){
+                if (quizes[currentQuestion].answer == option3.text){
                     rightAnswer(option3)
                 }else{
                     wrongAnswer(option3)
@@ -134,7 +126,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
             }
 
             R.id.option4 -> {
-                if (quizes.get(currentQuestion).answer == option4.text){
+                if (quizes[currentQuestion].answer == option4.text){
                     rightAnswer(option4)
                 }else{
                     wrongAnswer(option4)
@@ -145,15 +137,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
                 currentQuestion++
                 if (currentQuestion == quizes.size) {
                     currentQuestion = 0
-                    tried = 0;
-                    correct = 0;
+                    tried = 0
+                    correct = 0
                 }
 
-                questionView.text = quizes.get(currentQuestion).question
-                option1.text = quizes.get(currentQuestion).options?.get(0)?.option
-                option2.text = quizes.get(currentQuestion).options?.get(1)?.option
-                option3.text = quizes.get(currentQuestion).options?.get(2)?.option
-                option4.text = quizes.get(currentQuestion).options?.get(3)?.option
+                questionView.text = quizes[currentQuestion].question
+                option1.text = quizes[currentQuestion].options?.get(0)?.option
+                option2.text = quizes[currentQuestion].options?.get(1)?.option
+                option3.text = quizes[currentQuestion].options?.get(2)?.option
+                option4.text = quizes[currentQuestion].options?.get(3)?.option
 
                 option1.background.clearColorFilter()
                 option2.background.clearColorFilter()
@@ -161,12 +153,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
                 option4.background.clearColorFilter()
 
                 container.setBackgroundColor(Color.parseColor("#FAFAFA"))
-                window.setStatusBarColor(Color.parseColor("#A63F51B5"))
+                window.statusBarColor = Color.parseColor("#A63F51B5")
 
                 answerClicked = false
                 explainButton.visibility = View.GONE
 
-                scoreView.text = "$correct correct out of $tried try"
+                updateScore()
 
             }
 
@@ -175,7 +167,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
             }
 
             R.id.infoButton -> {
-                val intent = Intent(this, AboutActivity::class.java)
                 startActivity(Intent(this, AboutActivity::class.java))
             }
 
@@ -187,55 +178,58 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
 
     private fun rightAnswer(button: Button){
         if (!answerClicked) {
+
             correct++
             tried++
-
-            window.setStatusBarColor(Color.parseColor("#B9F6CA"))
+            window.statusBarColor = Color.parseColor("#B9F6CA")
             button.background.setColorFilter(Color.GREEN, PorterDuff.Mode.MULTIPLY)
             container.setBackgroundColor(Color.parseColor("#B9F6CA"))
             answerClicked = true
             explainButton.visibility = View.VISIBLE
+
             buzzer = MediaPlayer.create(this, R.raw.correct)
-            buzzer.setOnCompletionListener(MediaPlayer.OnCompletionListener {
+            buzzer.setOnCompletionListener({
                 buzzer.reset()
                 buzzer.release()
             })
             buzzer.start()
-            scoreView.text = "$correct correct out of $tried try"
+            updateScore()
         }
     }
 
     private fun wrongAnswer(button: Button){
         if (!answerClicked) {
+
             tried++
-            window.setStatusBarColor(Color.parseColor("#FF8A80"))
+            window.statusBarColor = Color.parseColor("#FF8A80")
             button.background.setColorFilter(Color.RED, PorterDuff.Mode.MULTIPLY)
             container.setBackgroundColor(Color.parseColor("#FF8A80"))
             answerClicked = true
-            if(option1 != button && option1.text == quizes.get(currentQuestion).answer){
+
+            if(option1 != button && option1.text == quizes[currentQuestion].answer){
                 option1.background.setColorFilter(Color.GREEN, PorterDuff.Mode.MULTIPLY)
-            }else if (option2 != button && option2.text == quizes.get(currentQuestion).answer){
+            }else if (option2 != button && option2.text == quizes[currentQuestion].answer){
                 option2.background.setColorFilter(Color.GREEN, PorterDuff.Mode.MULTIPLY)
-            }else if (option3 != button && option3.text == quizes.get(currentQuestion).answer){
+            }else if (option3 != button && option3.text == quizes[currentQuestion].answer){
                 option3.background.setColorFilter(Color.GREEN, PorterDuff.Mode.MULTIPLY)
-            }else if (option4 != button && option4.text == quizes.get(currentQuestion).answer){
+            }else if (option4 != button && option4.text == quizes[currentQuestion].answer){
                 option4.background.setColorFilter(Color.GREEN, PorterDuff.Mode.MULTIPLY)
             }
             explainButton.visibility = View.VISIBLE
             buzzer = MediaPlayer.create(this, R.raw.wrong)
-            buzzer.setOnCompletionListener(MediaPlayer.OnCompletionListener {
+            buzzer.setOnCompletionListener({
                 buzzer.reset()
                 buzzer.release()
             })
             buzzer.start()
-            scoreView.text = "$correct correct out of $tried try"
+            updateScore()
         }
     }
 
     private fun showExplanation(){
-        val modalBottomSheet = ModalBottomSheet().newInstance(quizes.get(currentQuestion).answer as String,
-                quizes.get(currentQuestion).explanation as String,
-                this.resources.getIdentifier(quizes.get(currentQuestion).image, "drawable", this.packageName))
+        val modalBottomSheet = ModalBottomSheet().newInstance(quizes[currentQuestion].answer as String,
+                quizes[currentQuestion].explanation as String, this.resources.getIdentifier(quizes[currentQuestion].image,
+                "drawable", this.packageName))
         modalBottomSheet.show(supportFragmentManager, "bottom sheet")
     }
 
@@ -250,12 +244,17 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
                 bytesRead  = inputStream.read(buf)
             }
             outputStream.close()
-            return file.getAbsolutePath()
+            return file.absolutePath
         } catch (e: IOException) {
             e.printStackTrace()
         }
 
         return null
+    }
+
+    private fun updateScore(){
+        val scoreText = "$correct correct out of $tried try"
+        scoreView.text = scoreText
     }
 
     override fun onDestroy() {

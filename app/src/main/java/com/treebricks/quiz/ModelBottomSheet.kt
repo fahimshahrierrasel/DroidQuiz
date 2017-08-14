@@ -8,10 +8,11 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 
-
 /**
- * Created by fahim on 6/22/17.
- */
+* Created by fahim on 6/22/17.
+* Project: Quiz
+*/
+
 class ModalBottomSheet : BottomSheetDialogFragment() {
 
     private var correctAnswer: String? = null
@@ -26,8 +27,8 @@ class ModalBottomSheet : BottomSheetDialogFragment() {
         val explainImageView = view.findViewById(R.id.explainImageView) as ImageView
         val explainTextview = view.findViewById(R.id.explainTextView) as TextView
 
-        correctAnswerTextview.text = "Correct Answer: " + correctAnswer
-        explainTextview.text = explainText;
+        correctAnswerTextview.text = String.format("%s %s",getString(R.string.correct_answer), correctAnswer)
+        explainTextview.text = explainText
         explainImageView.setImageResource(explainImage as Int)
 
         return view
